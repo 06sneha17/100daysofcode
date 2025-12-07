@@ -1,0 +1,63 @@
+//Write a program to take an integer array arr and an integer k as inputs. Print the maximum sum of all the subarrays of size k.
+#include <stdio.h>
+#include <limits.h> // For INT_MIN
+
+// Function to find the maximum sum of subarrays of size k
+int maxSumSubarray(int arr[], int n, int k) {
+    // Handle invalid input cases
+    if (n < k || k <= 0) {
+        printf("Invalid input: Array size must be greater than or equal to k, and k must be positive.\n");
+        return INT_MIN; // Return a very small number to indicate error
+    }
+
+    int current_window_sum = 0;
+    int max_sum = INT_MIN;
+
+    // Calculate the sum of the first window of size k
+    for (int i = 0; i < k; i++) {
+        current_window_sum += arr[i];
+    }
+
+    max_sum = current_window_sum; // Initialize max_sum with the first window's sum
+
+    // Slide the window across the array
+    for (int i = k; i < n; i++) {
+        current_window_sum += arr[i] - arr[i - k]; // Add new element, remove old element
+        if (current_window_sum > max_sum) {
+            max_sum = current_window_sum;
+        }
+    }
+
+    return max_sum;
+}
+
+int main() {
+    int arr[] = {1, 4, 2, 10, 2, 3, 1, 0, 20};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 4;
+
+    int result = maxSumSubarray(arr, n, k);
+
+    if (result != INT_MIN) {
+        printf("The maximum sum of a subarray of size %d is: %d\n", k, result);
+    }
+
+    // Example with different inputs
+    int arr2[] = {-1, -2, -3, -4, -5};
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+    int k2 = 2;
+    result = maxSumSubarray(arr2, n2, k2);
+    if (result != INT_MIN) {
+        printf("The maximum sum of a subarray of size %d is: %d\n", k2, result);
+    }
+
+    int arr3[] = {5};
+    int n3 = sizeof(arr3) / sizeof(arr3[0]);
+    int k3 = 1;
+    result = maxSumSubarray(arr3, n3, k3);
+    if (result != INT_MIN) {
+        printf("The maximum sum of a subarray of size %d is: %d\n", k3, result);
+    }
+
+    return 0;
+}
